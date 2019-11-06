@@ -6,7 +6,7 @@ import { IConfig } from './enviroment.config';
 export class SpringConfigReader {
 
     /**
-     * Configuraciones leidas, luego de la primera carga
+     * Settings readed after the first load.
      */
     private configReaded!: IConfig;
 
@@ -18,39 +18,41 @@ export class SpringConfigReader {
     }
 
     /**
-     * Obtiene las configuraciones leidas luego de la primera carga. 
+     * Get the settings read after the first load.
      */
     public getConfig(): IConfig {
         return this.configReaded;
     }
 
     /**
-     * Realiza la primera carga de configuraciones, se debe llamar al iniciar la aplicación.
-     * Setea el objeto public configReaded con las configuraciones leidas.
+     * Make the first configuration load, it must be called when starting the application.
+     * Set the public configReaded object with the read settings.
      * 
-     * @returns IEnv objeto de configuraciones
+     * @returns IEnv settings object.
      */
     public async getInitialConfig(): Promise<IConfig | any> {
         try {
             this.config = await this.config;
             this.configReaded = this.config;
-            CustomLogger.info(`Configuracion leida -> ${JSON.stringify(this.config.CONFIG_VARIABLES)}`);
+            CustomLogger.info(`Configuration readed -> ${JSON.stringify(this.config.CONFIG_VARIABLES)}`);
         }
         catch (error) {
-            throw new Error(`[ERROR] Configuracion no encontrada`);
+            throw new Error(`[ERROR] Configuration not found`);
         }
         return this.config;
     }
 
     /**
-     * Inicia la lectura de configuraciones desde spring config o local
+     * Start reading configurations from spring config or local.
      */
     private readConfig(): Promise<IConfig | any> {
         if (this.configLocal.SPRING_PROFILES_ACTIVE == 'local') return new Promise(_ => { return this.configLocal });
         let branchAux: string = process.env.SPRING_CLOUD_BRANCH || this.configLocal.SPRING_CLOUD_BRANCH;
         branchAux = branchAux.replace(/\//g, '(_)');
-        let uri = `${process.env.SPRING_CLOUD_CONFIG_URI || this.configLocal.SPRING_CLOUD_CONFIG_URI}/${process.env.SPRING_APPLICATION_NAME || this.configLocal.SPRING_APPLICATION_NAME}/${process.env.SPRING_PROFILES_ACTIVE || this.configLocal.SPRING_PROFILES_ACTIVE}/${process.env.SPRING_CLOUD_BRANCH || branchAux}`;
-        CustomLogger.info(`Leyendo configuracion desde -> ${uri}`)
+        let uri = `${process.env.SPRING_CLOUD_CONFIG_URI || this.configLocal.SPRING_CLOUD_CONFIG_URI}/${process.env.SPRING_APPLICATION_NAME || this.configLocal.SPRING_APPLICATION_NAME}
+                    /${process.env.SPRING_PROFILES_ACTIVE || this.configLocal.SPRING_PROFILES_ACTIVE}/${process.env.SPRING_CLOUD_BRANCH || branchAux}`;
+
+        CustomLogger.info(`Reading configuration from -> ${uri}`)
         return axios.get(uri)
             .then((config: any) => {
                 const { data } = config;
@@ -63,19 +65,18 @@ export class SpringConfigReader {
     }
 
     /**
-     * Parsea las propiedades buscando las existentes en environment.config y
-     * reemplazando con variables de entorno o default
+     * Parse the properties by searching for existing ones in environment.config and
+     * replacing with environment or default variables
      * 
-     * @param propertySource nodo de las propiedades leidas desde spring config
-     * @returns IEnv objeto parseado 
+     * @param propertySource properties node read from spring config.
+     * @returns IEnv parsed object
      */
     private parseResponse(propertySource: PropertySource): IConfig {
         Object.keys(this.configLocal.CONFIG_VARIABLES).map((key) => {
-            // if (key == 'SPRING_PROFILES_ACTIVE' || key == 'SPRING_CLOUD_CONFIG_URI' || key == 'APPLICATION_NAME' ) return;
             let springKey = key.toLowerCase().replace(/__/g, '.');
             let currentPropertie = propertySource.source[springKey];
             if (!currentPropertie) {
-                CustomLogger.error(`Error leyendo configuracion -> [${key}]`);
+                CustomLogger.error(`Error reading configuration -> [${key}]`);
                 return;
             }
             if (Number.isInteger(currentPropertie)) {
@@ -91,7 +92,7 @@ export class SpringConfigReader {
         var regex = new RegExp(/\${(\w+):(\S+)}/, 'gm')
         return value.replace(regex, (match, systemVariable, defaultValue) => {
             if (!process.env[systemVariable]) {
-                CustomLogger.warn(`Variable de entorno no encontrada -> [${systemVariable}]  -> se establece por defecto ->  [${defaultValue}]`);
+                CustomLogger.warn(`Environment variable not found -> [${systemVariable}]  -> is set by default ->  [${defaultValue}]`);
             }
             return process.env[systemVariable] || defaultValue;
         })
@@ -113,7 +114,7 @@ export interface PropertySource {
 }
 
 class CustomLogger {
-    static startMessage = '[SpringConfigReader] -> ';
+    static startMessage = '[NSCC] -> ';
 
     static info(message: string) {
         console.log('\x1b[32m%s\x1b[0m', this.startMessage + message);

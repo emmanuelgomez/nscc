@@ -1,32 +1,18 @@
 export interface IConfig{
   /**
-   * Para lograr compatibilidad con estructura de configuracion dentro
-   * de yml de spring cloud se deben seguir las siguientes convenciones:
-   * 
-   * 1- Para representar los niveles dentro del archivo yml se debe utilizar doble underscore '__'
-   *    Ejemplo: 'app.host.ig_db'  ->  'APP__HOST__IG_DB'
-   * 
-   * 2- Caracteres especiales en nombre de variable solo se permite simple underscore '_'
-   *    No se permite '.' , '-' , etc
-   * 
-   * 3- Las variables 'ENVIRONMENT' y 'SPRING_CLOUD_HOST' solo se utilizan para la carga desde spring cloud.
-   *    Si 'ENVIRONMENT' == 'local' se carga por defecto la configuracion establecida en este fichero.
-   */
+   * To achieve compatibility with configuration structure within
+   * from spring cloud yml the following conventions must be followed:
+   *
+   * 1- To represent the levels within the yml file you must use double underscore '__'
+   * Example: 'app.host.ig_db' -> 'APP__HOST__IG_DB'
+   *
+   * 2- Special characters in variable name only simple underscore '_' is allowed
+   *    Not allowed '.' , '-' , etc
+   *
+   * 3- The variables 'ENVIRONMENT' and 'SPRING_CLOUD_HOST' are only used for loading from the spring cloud.
+   * If 'ENVIRONMENT' == 'local' the configuration set in this file is loaded by default.
+   **/
 
-  /**
-   * Para lograr compatibilidad con estructura de configuracion dentro
-   * de yml de spring cloud se deben seguir las siguientes convenciones:
-   *
-   * 1- Para representar los niveles dentro del archivo yml se debe utilizar doble underscore '__'
-   *    Ejemplo: 'app.host.ig_db'  ->  'APP__HOST__IG_DB'
-   *
-   * 2- Caracteres especiales en nombre de variable solo se permite simple underscore '_'
-   *    No se permite '.' , '-' , etc
-   *
-   * 3- Las variables 'ENVIRONMENT' , 'SPRING_CLOUD_HOST' y 'SPRING_BRANCH_LABEL' solo se utilizan para la carga desde spring cloud.
-   *    Si 'ENVIRONMENT' == 'local' se carga por defecto la configuracion establecida en este fichero.
-   * 
-   */
   //Necesario
   SPRING_APPLICATION_NAME: string;
   SPRING_CLOUD_BRANCH: string;

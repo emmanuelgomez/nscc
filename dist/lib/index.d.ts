@@ -1,33 +1,33 @@
 import { IConfig } from './enviroment.config';
 export declare class SpringConfigReader {
     /**
-     * Configuraciones leidas, luego de la primera carga
+     * Settings readed after the first load.
      */
     private configReaded;
     private config;
     private configLocal;
     constructor(configDefault: IConfig);
     /**
-     * Obtiene las configuraciones leidas luego de la primera carga.
+     * Get the settings read after the first load.
      */
     getConfig(): IConfig;
     /**
-     * Realiza la primera carga de configuraciones, se debe llamar al iniciar la aplicación.
-     * Setea el objeto public configReaded con las configuraciones leidas.
+     * Make the first configuration load, it must be called when starting the application.
+     * Set the public configReaded object with the read settings.
      *
-     * @returns IEnv objeto de configuraciones
+     * @returns IEnv settings object.
      */
     getInitialConfig(): Promise<IConfig | any>;
     /**
-     * Inicia la lectura de configuraciones desde spring config o local
+     * Start reading configurations from spring config or local.
      */
     private readConfig;
     /**
-     * Parsea las propiedades buscando las existentes en environment.config y
-     * reemplazando con variables de entorno o default
+     * Parse the properties by searching for existing ones in environment.config and
+     * replacing with environment or default variables
      *
-     * @param propertySource nodo de las propiedades leidas desde spring config
-     * @returns IEnv objeto parseado
+     * @param propertySource properties node read from spring config.
+     * @returns IEnv parsed object
      */
     private parseResponse;
     private applyRegex;
